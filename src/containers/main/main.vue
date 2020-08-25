@@ -17,6 +17,10 @@
           </template>
           <el-menu-item index="changePass">修改密码</el-menu-item>
         </el-submenu>
+         <el-menu-item index="selectExam" >
+          <i class="el-icon-view"></i>
+          <span slot="title">查询成绩</span>
+        </el-menu-item>
       </el-menu>
     </div>
     <div class="right-box">
@@ -43,13 +47,13 @@
 import httpServer from '@/components/httpServer/httpServer.js'
 
 export default {
-  data() {
+  data () {
     return {
       userName: ''
     }
   },
   methods: {
-    handleCommand(command) {
+    handleCommand (command) {
       if (command == 'exit') {
         localStorage.removeItem('username');
         this.$router.push('/login');
@@ -57,39 +61,21 @@ export default {
         this.$router.push('/main/personalCenter/changePass');
       }
     },
-    selectItem(i) {
+    selectItem (i) {
       if (i == 'examOnline') { //点击在线考试
-        httpServer({
-            url: '/exam/query',
-          }, {
-            stuId: localStorage.stuId,
-          })
-          .then((res) => {
-            let respData = res.data;
-            // let respData = {
-            //   "respCode": "1",
-            //   "paperId": 38,
-            //   "instId" : 26,
-            // }
-            sessionStorage.instId = respData.instId;
-            if(res.data.respCode == '1') {
-              this.$router.push(`/main/exam/${respData.paperId}/0`);
-            }
-          })
-          .catch((err) => {
-
-          })
-
-
+        this.$router.push('/main/exam/course');
       } else if (i == 'changePass') {
         this.$router.push('/main/personalCenter/changePass');
+      } else if (i == 'selectExam') {
+        console.log(1)
+        this.$router.push('/main/exam/selectTao');
       }
     }
   },
-  created() {
+  created () {
     this.userName = localStorage.username;
   },
-  beforeCreate() {
+  beforeCreate () {
     if (!localStorage.username) {
       this.$router.push('/login');
     }
@@ -110,14 +96,14 @@ export default {
   overflow-x: hidden;
 }
 
-.left-menu .logo{
+.left-menu .logo {
   display: block;
   width: 130px;
   margin: 50px auto;
 }
 
 .el-menu {
-  border-right : none;
+  border-right: none;
 }
 
 .right-box {
@@ -146,11 +132,10 @@ export default {
 }
 
 .el-button--text {
-  color: #000
+  color: #000;
 }
 
 .el-button--text:hover {
-  color: #000
+  color: #000;
 }
-
 </style>

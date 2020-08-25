@@ -1,31 +1,48 @@
 <template>
-<div class="login">
-  <div class="login-content-wrap">
-    <div class="login-content">
-      <img class="logo" src="../../assets/images/logo.jpg" />
-      <div class="login-from">
-        <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="50px" class="demo-ruleForm" size="mini">
-          <el-form-item label="学号" prop="name">
-            <el-input type="text" v-model="ruleForm2.name" auto-complete="off" placeholder="lqw"></el-input>
-          </el-form-item>
-          <el-form-item label="密码" prop="password">
-            <el-input type="password" v-model="ruleForm2.password" auto-complete="off" placeholder="123456"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="submitForm('ruleForm2')">登录</el-button>
-          </el-form-item>
-        </el-form>
+  <div class="login">
+    <div class="login-content-wrap">
+      <div class="login-content">
+        <img class="logo"
+             width="200px"
+             src="../../assets/images/logo.jpg" />
+        <div class="login-from">
+          <el-form :model="ruleForm2"
+                   status-icon
+                   :rules="rules2"
+                   ref="ruleForm2"
+                   label-width="50px"
+                   class="demo-ruleForm"
+                   size="mini">
+            <el-form-item label="学号"
+                          prop="name">
+              <el-input type="text"
+                        v-model="ruleForm2.name"
+                        auto-complete="off"
+                        placeholder="liusunyin"></el-input>
+            </el-form-item>
+            <el-form-item label="密码"
+                          prop="password">
+              <el-input type="password"
+                        v-model="ruleForm2.password"
+                        auto-complete="off"
+                        placeholder="123456"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary"
+                         @click="submitForm('ruleForm2')">登录</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
       </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>
 import httpServer from '@/components/httpServer/httpServer.js'
 
 export default {
-  data() {
+  data () {
     var validateName = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入学号'));
@@ -58,16 +75,17 @@ export default {
     };
   },
   methods: {
-    submitForm(formName) {
+    submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           httpServer({
-              url: '/user/login'
-            }, {
-              username: this.ruleForm2.name,
-              password: this.ruleForm2.password
-            })
+            url: 'http://127.0.0.1/exam-student/app/control/login.php'
+          }, {
+            username: this.ruleForm2.name,
+            password: this.ruleForm2.password
+          })
             .then((res) => {
+              console.log(res)
               res = res.data;
 
               // let res = {
@@ -80,14 +98,13 @@ export default {
               //   }],
               //   "respMsg": "登录成功"
               // };
-              if(res.respCode == '1') {
-                localStorage.username = res.studentInfo[0].name;
+              if (res.respCode == '200') {
+                console.log(res);
+                localStorage.username = res.studentInfo[0].sname;
                 localStorage.stuId = res.studentInfo[0].stuId;
-
-                this.$router.push('main/homepage');
+                //console.log(this.$router)
+                this.$router.push({ path: '/main/homepage' });
               }
-              
-
             })
 
         } else {
@@ -110,7 +127,7 @@ export default {
   left: 0;
   bottom: 0;
   right: 0;
-  background-image: url('../../assets/images/login-bg-small.jpg');
+  background-image: url("../../assets/images/login-bg-small.jpg");
   background-size: cover;
   min-height: 580px;
 }
@@ -120,7 +137,7 @@ export default {
   width: 460px;
   height: 100%;
   min-height: 580px;
-  background: rgba(255, 255, 255, .4);
+  background: rgba(255, 255, 255, 0.4);
   top: 0;
   right: 0;
 }
@@ -141,7 +158,7 @@ export default {
 .login .logo {
   display: block;
   margin: 0 auto;
-  margin-top: 50px
+  margin-top: 50px;
 }
 
 .login .login-form-button {
@@ -151,6 +168,6 @@ export default {
 .login .login-from {
   width: 80%;
   margin: 0 auto;
-  margin-top: 50px
+  margin-top: 50px;
 }
 </style>

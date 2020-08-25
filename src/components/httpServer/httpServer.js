@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Message,MessageBox  } from 'element-ui';
+import { Message, MessageBox } from 'element-ui';
 
 //添加一个请求拦截器
 axios.interceptors.request.use(config => {
@@ -16,11 +16,11 @@ axios.interceptors.response.use(response => {
   return Promise.resolve(error.response)
 })
 
-function successState(res) {
+function successState (res) {
   //这里可以隐藏loading
   //统一判断后端返回的错误码
-  if(res.data.respCode == "1"){
-    if(res.data.respMsg) {
+  if (res.data.respCode == 200) {
+    if (res.data.respMsg) {
       Message.success({
         showClose: true,
         message: res.data.respMsg,
@@ -29,30 +29,30 @@ function successState(res) {
     }
   }
   else {
-    if(res.data.respMsg) {
+    if (res.data.respMsg) {
       MessageBox(res.data.respMsg, '提示', {
         confirmButtonText: '确定',
         type: 'error'
       });
     }
     else {
-      MessageBox('服务器开小差了~请稍后再试', '提示', {
-        confirmButtonText: '确定',
-        type: 'error'
-      });
+      // MessageBox('服务器开小差了~请稍后再试', '提示', {
+      //   confirmButtonText: '确定',
+      //   type: 'error'
+      // });
     }
 
   }
 }
 
-function errorState(response) {
+function errorState (response) {
   //这里可以隐藏loading
   console.log(response)
   // 如果http状态码正常，则直接返回数据
   if (response && (response.status === 200 || response.status === 304 || response.status === 400)) {
     return response
-      // 如果不需要除了data之外的数据，可以直接 return response.data
-  }else{
+    // 如果不需要除了data之外的数据，可以直接 return response.data
+  } else {
     MessageBox('网络异常，请稍后再试', '提示', {
       confirmButtonText: '确定',
       type: 'error'
@@ -68,7 +68,7 @@ const httpServer = (opts, data) => {
 
   let baseURL = "/api";
 
-  if(!opts.method) {
+  if (!opts.method) {
     opts.method = "post";//默认提交方式
   }
 
@@ -81,19 +81,19 @@ const httpServer = (opts, data) => {
     params: Object.assign(Public, data),
     data: data,
     transformRequest: [function (data) {
-		  let ret = ''
-		  for (let it in data) {
-        if(data[it] instanceof Array) {
-          data[it].forEach((item)=>{
+      let ret = ''
+      for (let it in data) {
+        if (data[it] instanceof Array) {
+          data[it].forEach((item) => {
             ret += encodeURIComponent(it) + '=' + encodeURIComponent(item) + '&'
           })
         }
         else {
           ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
         }
-		  }
-		  return ret
-		}],
+      }
+      return ret
+    }],
     headers: opts.method == 'get'
       ? {
         'X-Requested-With': 'XMLHttpRequest',
@@ -112,7 +112,7 @@ const httpServer = (opts, data) => {
     delete httpDefaultOpts.params
   }
 
-  let promise = new Promise(function(resolve, reject) {
+  let promise = new Promise(function (resolve, reject) {
     axios(httpDefaultOpts).then((res) => {
       successState(res)
       resolve(res)
