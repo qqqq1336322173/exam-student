@@ -35,11 +35,11 @@ export default new Router({
       name: 'main',
       component: main,
       children: [
-        // {
-        //   path: '/',
-        //   name: 'examCourse',
-        //   component: examCourse
-        // },
+        {
+          path: '/',
+          name: 'examCourse',
+          component: examCourse
+        },
         {
           path: 'exam/course',
           name: 'examCourse',
